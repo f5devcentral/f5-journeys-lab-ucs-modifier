@@ -6,6 +6,7 @@
 - [Usage](#usage)
 - [Quick start](#quick-start)
 - [Details of the changes made](#details-of-the-changes-made)
+- [Contributing](#contributing)
 
 ----
 ## Description
@@ -66,3 +67,13 @@ ucs-modifier -u <UCS_FILE> -m <IP> -p <PASSWORD>
 + Generates new certificates matching the ciphers configuration
 + Generates html files showing the changes made: <work_dir_in_container>/config_comparison/
 
+## Contributing
+
+### Bug reporting
+
+Let us know if something went wrong. By reporting issues, you support development of this project and get a chance of having it fixed soon.
+Please use bug template available [here](https://github.com/f5devcentral/f5-journeys-lab-ucs-modifier/issues/new?assignees=&labels=&template=bug_report.md&title=%5BBUG%5D).
+
+### Feature requests
+
+Ideas for enhancements are welcome [here](https://github.com/f5devcentral/f5-journeys-lab-ucs-modifier/issues/new?assignees=&labels=&template=feature_request.md&title=%5BFEAT%5D)
