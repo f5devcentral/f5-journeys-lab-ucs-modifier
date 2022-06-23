@@ -5,9 +5,9 @@
 - [Description](#description)
 - [Quick start](#quick-start)
 - [Installation](#installation)
-- [Preparation of the destination platform](#preparation-of-the-destiantion-platform)
+- [Preparation of the destination platform](#preparation-of-the-destination-platform)
 - [Usage](#usage)
-- [Available arguments](##available-arguments)
+- [Available arguments](#available-arguments)
 - [Details of the changes made](#details-of-the-changes-made)
 - [Contributing](#contributing)
 
@@ -53,33 +53,33 @@ Destination BIG-IP (lab):
 
 ## Usage
 
-Run the image in the container interactively:
+1. Run the image in the container interactively:
 ```
 docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
 ```
 
-Execute ucs-modifier in the container:
+2. Execute ucs-modifier in the container:
 ```
 ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
 ```
-> Encrypted UCS files are not supported currently
+> Encrypted UCS files are not supported currently.\
 > Modified UCS file (<UCS_FILE_NAME>_modified.ucs) is saved to the same directory as the original UCS file provided (<UCS_FILE>.ucs).
 
-Transfer <UCS_FILE_NAME>_modified.ucs to destination BIG-IP (lab)
+3. Transfer <UCS_FILE_NAME>_modified.ucs to destination BIG-IP (lab)
 
-Load UCS:
+4. Load UCS:
 
 + on the same platform type without the license:
 ```
 tmsh load sys ucs <UCS_FILE_NAME>_modified.ucs no-license
 ```
-> from version 1.0.1 the original bigip.license file is removed from UCS (avoiding license errors if "no-license" parameter is omitted)
+> From version 1.0.1 the original bigip.license file is removed from UCS (avoiding license errors if "no-license" parameter is omitted).
 
 + on a different platform type:
 ```
 tmsh load sys ucs <UCS_FILE_NAME>_modified.ucs platform-migrate
 ```
-> With platform-migrate option, license is excluded by default
+> With platform-migrate option, license is excluded by default.
 
 ## Available arguments
 ```
