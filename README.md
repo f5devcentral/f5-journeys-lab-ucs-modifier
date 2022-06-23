@@ -3,57 +3,105 @@
 ----
 ## Contents:
 - [Description](#description)
-- [Usage](#usage)
 - [Quick start](#quick-start)
+- [Installation](#installation)
+- [Preparation of the destination platform](#preparation-of-the-destiantion-platform)
+- [Usage](#usage)
+- [Available arguments](##available-arguments)
 - [Details of the changes made](#details-of-the-changes-made)
 - [Contributing](#contributing)
 
 ----
 ## Description
-This tool modifies (sanitizes) UCS from source BIG-IP to be restored onto laboratory BIG-IP that simplifies moving the configuration to laboratory and makes it easier to reproduce issues or test upgrades without affecting production.
+This tool modifies (sanitizes) UCS from source BIG-IP (11.x and later) to be restored onto laboratory BIG-IP that simplifies moving the configuration to laboratory and makes it easier to reproduce issues or test upgrades without affecting production.
 Main advantage is that it does not require access to source BIG-IP master key, certificates, keys or passwords.
 
-## Usage
+## Quick start
+
 ```
-usage: ucs-modifier [-h] -u UCS -m MGMT_IP [-p PASSWORD] [--no-replace-cert] [-o OUTPUT]
-                    [-d]
-Modifies the specified ucs file, removing any sensitive data using values and files from
-another big-ip
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
+```
+
+## Installation
+
+Download the docker image:
+```
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+```
+
+### Optional step (if the tool is to be run on an offline system):
+
+Save and compress the image:
+```
+docker save f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1 | gzip > f5-journeyslab-ucsmodifier_v1.0.1.tar.gz
+```
+
+Transfer archive to the offline system
+
+Load image from the archive:
+```
+docker load < f5-journeys-lab-ucs-modifier_v1.0.1.tar.gz
+```
+
+## Preparation of the destination platform
+
+Destination BIG-IP (lab):
++ must have sufficient resources (e.g. RAM for BIG-IP VE with multiple modules)
++ must be properly licensed (for provisioned modules) before loading a modified UCS
+
+## Usage
+
+Run the image in the container interactively:
+```
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+```
+
+Execute ucs-modifier in the container:
+```
+ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
+```
+> Encrypted UCS files are not supported currently
+> Modified UCS file (<UCS_FILE_NAME>_modified.ucs) is saved to the same directory as the original UCS file provided (<UCS_FILE>.ucs).
+
+Transfer <UCS_FILE_NAME>_modified.ucs to destination BIG-IP (lab)
+
+Load UCS:
+
++ on the same platform type without the license:
+```
+tmsh load sys ucs <UCS_FILE_NAME>_modified.ucs no-license
+```
+> from version 1.0.1 the original bigip.license file is removed from UCS (avoiding license errors if "no-license" parameter is omitted)
+
++ on a different platform type:
+```
+tmsh load sys ucs <UCS_FILE_NAME>_modified.ucs platform-migrate
+```
+> With platform-migrate option, license is excluded by default
+
+## Available arguments
+```
+usage: ucs-modifier [-h] -u UCS -m MGMT_IP [-p PASSWORD]
+                    [--no-replace-cert] [-o OUTPUT] [-d]
+
+Modifies the specified ucs file, removing any sensitive data using values and
+files from destination BIG-IP
 
 optional arguments:
   -h, --help            show this help message and exit
   -u UCS, --ucs UCS     Ucs file to modify
   -m MGMT_IP, --mgmt-ip MGMT_IP
-                        Management IP of the used big-ip
+                        Management IP of the target BIG-IP
   -p PASSWORD, --password PASSWORD
-                        Root password of big-ip ('default' by default)
+                        Root password of the target BIG-IP ('default' by
+                        default)
   --no-replace-cert     Skip replacing the certificates
   -o OUTPUT, --output OUTPUT
-                        Target output file name
+                        Target output UCS file name
   -d, --debug           Enable debug logging
 ```
-
-## Quick start
-
-Download the docker image:
-```
-docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.0
-```
-Run the image in the container interactively:
-```
-docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.0
-```
-Execute ucs-modifier in the container:
-```
-ucs-modifier -u <UCS_FILE> -m <IP> -p <PASSWORD>
-```
-> Modified UCS file (<ORIGINAL_UCS_FILENAME>_modified.ucs) is saved to the same directory as the original UCS file provided.
-
-Transfer <ORIGINAL_UCS_FILENAME>_modified.ucs to destination BIG-IP (lab) and load UCS without license:
-```
-tmsh load sys ucs <ORIGINAL_UCS_FILENAME>_modified.ucs no-license
-```
-> Destination BIG-IP (lab) must have a license installed before loading UCS. 
 
 ## Details of the changes made
 + Replaces User IDs and passwords with the ones from target big-ip
@@ -72,6 +120,7 @@ tmsh load sys ucs <ORIGINAL_UCS_FILENAME>_modified.ucs no-license
 + Removes remote syslog addresses
 + Generates new certificates matching the ciphers configuration
 + Generates html files showing the changes made: <work_dir_in_container>/config_comparison/
++ Removes the license file from UCS
 
 ## Contributing
 
