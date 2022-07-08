@@ -19,8 +19,8 @@ Main advantage is that it does not require access to source BIG-IP master key, c
 ## Quick start
 
 ```
-docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
-docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.2
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.2
 ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
 ```
 
@@ -28,21 +28,21 @@ ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
 
 Download the docker image:
 ```
-docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.2
 ```
 
 ### Optional step (if the tool is to be run on an offline system):
 
 Save and compress the image:
 ```
-docker save f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1 | gzip > f5-journeyslab-ucsmodifier_v1.0.1.tar.gz
+docker save f5devcentral/f5-journeyslab-ucsmodifier:v1.0.2 | gzip > f5-journeyslab-ucsmodifier_v1.0.2.tar.gz
 ```
 
 Transfer archive to the offline system
 
 Load image from the archive:
 ```
-docker load < f5-journeys-lab-ucs-modifier_v1.0.1.tar.gz
+docker load < f5-journeys-lab-ucs-modifier_v1.0.2.tar.gz
 ```
 
 ## Preparation of the destination platform
@@ -55,17 +55,21 @@ Destination BIG-IP (lab):
 
 1. Run the image in the container interactively:
 ```
-docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.1
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.2
 ```
 
 2. Execute ucs-modifier in the container:
 ```
-ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
+ucs-modifier -u /UCS/<UCS_FILE_NAME>.ucs -m <MGMT_IP> -p <PASSWORD>
 ```
-> Encrypted UCS files are not supported currently.\
-> Modified UCS file (<UCS_FILE_NAME>_modified.ucs) is saved to the same directory as the original UCS file provided (<UCS_FILE>.ucs).
+> - Destination BIG-IP lab should be prepared (and ready for ssh connection) before executing the "ucs-modifier..." command as it will connect to the target BIG-IP (<MGMT_IP>) to get some basic config (passwords, management IP, gateway - [Details of the changes made](#details-of-the-changes-made)).
+> - By defualt modified UCS file (<UCS_FILE_NAME>_modified.ucs) is saved to the same directory as the original UCS file provided (<UCS_FILE_NAME>.ucs).
+> - Only unencrypted UCS files (with .ucs extension) are supported.
 
 3. Transfer <UCS_FILE_NAME>_modified.ucs to destination BIG-IP (lab)
+```
+scp /UCS/<UCS_FILE_NAME>_modified.ucs <MGMT_IP>:/var/local/ucs/
+```
 
 4. Load UCS:
 
