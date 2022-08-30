@@ -21,7 +21,7 @@ Main advantage is that it does not require access to source BIG-IP master key, c
 ```
 docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
 docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
-ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p <PASSWORD>
+ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p '<PASSWORD>'
 ```
 
 ## Installation
