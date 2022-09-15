@@ -26,6 +26,8 @@ ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p '<PASSWORD>'
 
 ## Installation
 
+> To use Podman instead of Docker, we recommend creating a linux alias: `alias docker='podman'`
+
 Download the docker image:
 ```
 docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
@@ -42,7 +44,7 @@ Transfer archive to the offline system
 
 Load image from the archive:
 ```
-docker load < f5-journeys-lab-ucs-modifier_v1.0.3.tar.gz
+docker load < f5-journeyslab-ucsmodifier_v1.0.3.tar.gz
 ```
 
 ## Preparation of the destination platform
