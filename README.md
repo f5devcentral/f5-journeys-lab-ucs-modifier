@@ -19,8 +19,8 @@ Main advantage is that it does not require access to source BIG-IP master key, c
 ## Quick start
 
 ```
-docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
-docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.4
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.4
 ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p '<PASSWORD>'
 ```
 
@@ -30,21 +30,21 @@ ucs-modifier -u <UCS_FILE_NAME>.ucs -m <IP> -p '<PASSWORD>'
 
 Download the docker image:
 ```
-docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
+docker pull f5devcentral/f5-journeyslab-ucsmodifier:v1.0.4
 ```
 
 ### Optional step (if the tool is to be run on an offline system):
 
 Save and compress the image:
 ```
-docker save f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3 | gzip > f5-journeyslab-ucsmodifier_v1.0.3.tar.gz
+docker save f5devcentral/f5-journeyslab-ucsmodifier:v1.0.4 | gzip > f5-journeyslab-ucsmodifier_v1.0.4.tar.gz
 ```
 
 Transfer archive to the offline system
 
 Load image from the archive:
 ```
-docker load < f5-journeyslab-ucsmodifier_v1.0.3.tar.gz
+docker load < f5-journeyslab-ucsmodifier_v1.0.4.tar.gz
 ```
 
 ## Preparation of the destination platform
@@ -57,7 +57,7 @@ Destination BIG-IP (lab):
 
 1. Run the image in the container interactively:
 ```
-docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.3
+docker run -v <local_directory_with_UCS>:/UCS -it f5devcentral/f5-journeyslab-ucsmodifier:v1.0.4
 ```
 
 2. Execute ucs-modifier in the container:
